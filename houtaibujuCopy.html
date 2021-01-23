@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>layout 后台大布局 - Layui</title>
+    <link rel="stylesheet" href="/layui/css/layui.css">
+</head>
+
+<body class="layui-layout-body">
+    <div class="layui-layout layui-layout-admin">
+        <!-- 引入头部 -->
+        {{ include './gonk/tou.html'}}
+
+        <!-- 引入头部 -->
+        {{ include './gonk/zuolan..html'}}
+
+        <div class="layui-body">
+            <!-- 内容主体区域 -->
+            <div style="padding: 15px;">
+                <form class="layui-form" action="">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">分类名称</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="title" required lay-verify="required" placeholder="请输入标题" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">时间</label>
+                        <div class="layui-input-inline">
+                            <input type="text" class="layui-input" id="test1" placeholder="yyyy-MM-dd">
+                        </div>
+                    </div>
+                    <br>
+                    <br>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+                            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- 引入底部 -->
+        {{ include './gonk/dibu.html'}}
+    </div>
+    <script src="/layui/layui.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.js"></script>
+    <script>
+        //JavaScript代码区域
+        layui.use('element', function() {
+            var element = layui.element;
+
+        });
+
+        // 获取地址栏中的id参数
+        let url = location.href;
+        let reg = /id=(.*)&?/;
+        // [...伪数组] => 转化为真数组
+        // [,id] 解构赋值数组 舍弃第一个参数，只要第二个参数
+        let [, id] = [...reg.exec(url)];
+        console.log('--' + id);
+        $.ajax({
+            url: '/bianji',
+            data: {
+                id
+            }
+        }).then(src => {
+            console.log(src);
+            let {
+                name,
+                time
+            } = src;
+
+        })
+
+        //Demo
+        layui.use(['form', 'laydate'], function() {
+            var form = layui.form;
+            var laydate = layui.laydate;
+
+            //监听提交
+            form.on('submit(formDemo)', function(data) {
+                layer.msg(JSON.stringify(data.field));
+                return false;
+            });
+
+            //常规用法
+            laydate.render({
+                elem: '#test1'
+            });
+        });
+    </script>
+</body>
+
+</html>
